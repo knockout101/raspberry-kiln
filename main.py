@@ -4,7 +4,7 @@ import adafruit_max31856
 import RPi.GPIO as gpio
 
 # Showing current GPIO mode
-print(f'\n[GPIO SETMODE: {gpio.getmode().upper()}]\n')
+print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 
 # Setting up the actual channel to output
 gpio.setup(31, gpio.OUT)
