@@ -3,8 +3,7 @@ import digitalio
 import adafruit_max31856
 import RPi.GPIO as gpio
 
-# Setting the mode for which the channels will be called
-gpio.setmode(gpio.BOARD)
+# Showing current GPIO mode
 print(f'\n[GPIO SETMODE: {gpio.getmode().upper()}]\n')
 
 # Setting up the actual channel to output
