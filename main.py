@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import board
 import digitalio
 import adafruit_max31856
