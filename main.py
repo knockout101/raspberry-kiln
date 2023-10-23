@@ -22,4 +22,4 @@ cs.direction = digitalio.Direction.OUTPUT
 
 thermocouple = adafruit_max31856.MAX31856(spi, cs)
 
-print(f'[TEMPERATURE] {thermocouple.temperature}{chr(223)}C')
+print(f'[TEMPERATURE] {thermocouple.temperature} C')
