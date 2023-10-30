@@ -13,7 +13,7 @@ print(f"\n[GPIO SETUP CHANNEL 31]\n")
 
 # Setting output state to high = 3V
 gpio.output(31, 0)
-print(f"\n[GPIO OUTPUT STATE HIGH SET TO CHANNEL 31]\n")
+print(f"\n[GPIO OUTPUT SET TO 0!]\n")
 
 spi = board.SPI()
 
