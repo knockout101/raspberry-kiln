@@ -12,18 +12,8 @@ print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 i = 1
 pin_D6 = digitalio.DigitalInOut(board.D6)
 pin_D6.direction = digitalio.Direction.OUTPUT
-sleep(0.2)
-pin_D6.direction = digitalio.Direction.INPUT
-sleep(0.2)
-pin_D6.direction = digitalio.Direction.OUTPUT
-sleep(0.2)
-pin_D6.direction = digitalio.Direction.INPUT
-sleep(0.2)
-pin_D6.direction = digitalio.Direction.OUTPUT
-sleep(0.2)
-pin_D6.direction = digitalio.Direction.INPUT
-sleep(0.2)
-print("\n[DIGITALIO PIN D6 SET TO INPUT]\n")
+
+print("\n[DIGITALIO PIN D6 SET TO OUTPUT]\n")
 
 # Setting output state to high = 3V
 # gpio.input(31, 0)
@@ -39,5 +29,3 @@ thermocouple = adafruit_max31856.MAX31856(spi, cs)
 print(f'[TEMPERATURE] {thermocouple.temperature} C')
 
 input("Press any key to cleanup and exit the program.")
-
-gpio.cleanup(31)
