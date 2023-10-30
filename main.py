@@ -23,3 +23,7 @@ cs.direction = digitalio.Direction.OUTPUT
 thermocouple = adafruit_max31856.MAX31856(spi, cs)
 
 print(f'[TEMPERATURE] {thermocouple.temperature} C')
+
+input("Press any key to cleanup and exit the program.")
+
+gpio.cleanup()
