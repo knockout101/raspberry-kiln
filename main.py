@@ -11,13 +11,18 @@ print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 # Setting up the actual channel to output
 i = 1
 pin_D6 = digitalio.DigitalInOut(board.D6)
-while (i < 10):
-    if (i % 2 == 0):
-        pin_D6.direction = digitalio.Direction.INPUT
-    else:
-        pin_D6.direction = digitalio.Direction.OUTPUT
-    i += 1
-    sleep(0.2)
+pin_D6.direction = digitalio.Direction.OUTPUT
+sleep(0.2)
+pin_D6.direction = digitalio.Direction.INPUT
+sleep(0.2)
+pin_D6.direction = digitalio.Direction.OUTPUT
+sleep(0.2)
+pin_D6.direction = digitalio.Direction.INPUT
+sleep(0.2)
+pin_D6.direction = digitalio.Direction.OUTPUT
+sleep(0.2)
+pin_D6.direction = digitalio.Direction.INPUT
+sleep(0.2)
 print("\n[DIGITALIO PIN D6 SET TO INPUT]\n")
 
 # Setting output state to high = 3V
