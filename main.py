@@ -18,7 +18,7 @@ print(f"\n[GPIO OUTPUT STATE HIGH SET TO CHANNEL 31]\n")
 spi = board.SPI()
 
 cs = digitalio.DigitalInOut(board.D5)
-cs.direction = digitalio.Direction.OUTPUT
+cs.direction = digitalio.Direction.INPUT
 
 thermocouple = adafruit_max31856.MAX31856(spi, cs)
 
