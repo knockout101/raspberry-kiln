@@ -8,7 +8,7 @@ import RPi.GPIO as gpio
 print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 
 # Setting up the actual channel to output
-gpio.setup(31, gpio.IN)
+gpio.setup(31, gpio.OUT)
 print(f"\n[GPIO SETUP CHANNEL 31]\n")
 
 # Setting output state to high = 3V
