@@ -11,7 +11,7 @@ print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 # Setting up the actual channel to output
 gpio.setup(6, gpio.OUT)
 
-gpio.output(6, gpio.HIGH)
+gpio.output(6, gpio.LOW)
 
 print("\n[DIGITALIO PIN D6 SET TO OUTPUT]\n")
 
