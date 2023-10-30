@@ -9,9 +9,9 @@ from time import sleep
 print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 
 # Setting up the actual channel to output
-i = 1
-pin_D6 = digitalio.DigitalInOut(board.D6)
-pin_D6.direction = digitalio.Direction.OUTPUT
+gpio.setup(31, gpio.OUT)
+
+gpio.out(31, gpio.HIGH)
 
 print("\n[DIGITALIO PIN D6 SET TO OUTPUT]\n")
 
