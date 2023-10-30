@@ -26,4 +26,4 @@ print(f'[TEMPERATURE] {thermocouple.temperature} C')
 
 input("Press any key to cleanup and exit the program.")
 
-gpio.cleanup()
+gpio.cleanup(31)
