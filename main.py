@@ -8,8 +8,9 @@ import RPi.GPIO as gpio
 print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
 
 # Setting up the actual channel to output
-gpio.setup(31, gpio.IN)
-print(f"\n[GPIO SETUP CHANNEL 31]\n")
+cs1 = digitalio.DigitalInOut(board.D6)
+cs1.direction = digitalio.Direction.INPUT
+print("\n[DIGITALIO PIN D6 SET TO INPUT]\n")
 
 # Setting output state to high = 3V
 # gpio.input(31, 0)
