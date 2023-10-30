@@ -5,31 +5,27 @@ import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep
 
-# Showing current GPIO mode
-print(f'\n[GPIO SETMODE: {gpio.getmode()}]\n')
+RELAY_SWITCH_PIN = 6
 
-# Setting up the actual channel to output
+SPI = board.SPI()
+
+# On/Off functions for relay
+def relay_off():
+    gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
+
+def relay_on():
+    gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
+
+# Setting up GPIO06 Output
 gpio.setup(6, gpio.OUT)
 
-for i in range(10):
-    gpio.output(6, gpio.HIGH)
-    sleep(0.2)
-    gpio.output(6, gpio.LOW)
-    sleep(0.2)
 
 print("\n[DIGITALIO PIN D6 SET TO OUTPUT]\n")
-
-# Setting output state to high = 3V
-# gpio.input(31, 0)
-# print(f"\n[GPIO OUTPUT SET TO 0!]\n")
-
-spi = board.SPI()
 
 cs = digitalio.DigitalInOut(board.D5)
 cs.direction = digitalio.Direction.OUTPUT
 
-thermocouple = adafruit_max31856.MAX31856(spi, cs)
+thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 
 print(f'[TEMPERATURE] {thermocouple.temperature} C')
 
-input("Press any key to cleanup and exit the program.")
