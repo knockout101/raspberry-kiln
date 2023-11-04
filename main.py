@@ -11,9 +11,11 @@ SPI = board.SPI()
 
 # On/Off functions for relay
 def relay_off():
+    print("Relay turned OFF")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
 
 def relay_on():
+    print("Relay turned ON \n =*20")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
 
 def relay_blink(delay, blinks):
@@ -25,6 +27,8 @@ def relay_blink(delay, blinks):
 
 # Setting up GPIO06 Output
 gpio.setup(6, gpio.OUT)
+
+gpio.out(RELAY_SWITCH_PIN, gpio.LOW)
 
 relay_blink(200, 10)
 
