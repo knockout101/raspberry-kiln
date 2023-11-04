@@ -28,7 +28,7 @@ def relay_blink(delay, blinks):
 # Setting up GPIO06 Output
 gpio.setup(6, gpio.OUT)
 
-gpio.out(RELAY_SWITCH_PIN, gpio.LOW)
+gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
 
 relay_blink(200, 10)
 
