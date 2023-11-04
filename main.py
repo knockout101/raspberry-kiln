@@ -30,7 +30,7 @@ gpio.setup(6, gpio.OUT)
 
 gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
 
-relay_blink(200, 10)
+relay_blink(0.2, 10)
 
 print("\n[DIGITALIO PIN D6 SET TO OUTPUT]\n")
 
