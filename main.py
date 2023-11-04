@@ -15,7 +15,7 @@ def relay_off():
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
 
 def relay_on():
-    print("Relay turned ON \n =*20")
+    print(f"Relay turned ON \n {'='*20}")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
 
 def relay_blink(delay, blinks):
