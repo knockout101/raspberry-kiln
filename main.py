@@ -16,9 +16,17 @@ def relay_off():
 def relay_on():
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
 
+def relay_blink(delay, blinks):
+    for _ in range(blinks):
+        relay_on()
+        sleep(delay)
+        relay_off()
+        sleep(delay)
+
 # Setting up GPIO06 Output
 gpio.setup(6, gpio.OUT)
 
+relay_blink(200, 10)
 
 print("\n[DIGITALIO PIN D6 SET TO OUTPUT]\n")
 
