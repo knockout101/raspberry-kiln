@@ -37,20 +37,21 @@ thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 
 answer = 0
-while(answer != 3):
+while(answer != 4):
     answer = input("""Please Enter A Number Choice:
-    1. turn on relay
-    2. turn off relay
-    3. exit program\n\n>> """)
+    1. Print Temperature
+    2. Turn ON relay
+    3. Turn OFF relay
+    4. Exit program\n\n>> """)
     match(answer):
         case '1':
-            relay_on()
-            print("[RELAY SWITCH] >> ON <<\n")
+            print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
         case '2':
-            relay_off()
-            print("[RELAY SWITCH] OFF\n")
+            relay_on()
         case '3':
-            exit(0)
+            relay_off()
+        case '4':
+            break
         case _:
             print("Undefined input")
 
