@@ -21,6 +21,10 @@ def relay_blink(delay, blinks):
         relay_off()
         sleep(delay)
 
+def print_temp():
+    print('\n')
+    print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+
 
 ##################################
 ##            SETUP             ##
@@ -45,12 +49,12 @@ while(answer != 4):
     4. Exit program\n\n>> """)
     match(answer):
         case '1':
-            print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+            print_temp()
         case '2':
-            print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+            print_temp()
             relay_on()
         case '3':
-            print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+            print_temp()
             relay_off()
         case '4':
             break
