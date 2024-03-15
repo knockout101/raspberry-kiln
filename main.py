@@ -22,39 +22,37 @@ def relay_blink(delay, blinks):
         sleep(delay)
 
 
-if __name__ == "__main___":
+##################################
+##            SETUP             ##
+##################################
 
-    ##################################
-    ##            SETUP             ##
-    ##################################
+RELAY_SWITCH_PIN = 6
 
-    RELAY_SWITCH_PIN = 6
+SPI = board.SPI()
 
-    SPI = board.SPI()
+cs = digitalio.DigitalInOut(board.D5)
+cs.direction = digitalio.Direction.OUTPUT
+thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 
-    cs = digitalio.DigitalInOut(board.D5)
-    cs.direction = digitalio.Direction.OUTPUT
-    thermocouple = adafruit_max31856.MAX31856(SPI, cs)
+gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 
-    gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
+answer = 0
+while(answer != 3):
+    answer = input("""Please Enter A Number Choice:
+                1. turn on relay
+                2. turn off relay
+                3. exit program""")
+    match(answer):
+        case 1:
+            relay_on()
+            print("[RELAY SWITCH] >> ON <<")
+        case 2:
+            relay_off()
+            print("[RELAY SWITCH] OFF")
+        case 3:
+            exit(0)
+        case _:
+            print("Undefined input")
 
-    answer = 0
-    while(answer != 3):
-        answer = input("""Please Enter A Number Choice:
-                    1. turn on relay
-                    2. turn off relay
-                    3. exit program""")
-        match(answer):
-            case 1:
-                relay_on()
-                print("[RELAY SWITCH] >> ON <<")
-            case 2:
-                relay_off()
-                print("[RELAY SWITCH] OFF")
-            case 3:
-                exit(0)
-            case _:
-                print("Undefined input")
-
-        print(f'[TEMPERATURE] {thermocouple.temperature} C')
+    print(f'[TEMPERATURE] {thermocouple.temperature} C')
 
