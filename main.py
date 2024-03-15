@@ -7,11 +7,11 @@ from time import sleep
 
 
 def relay_off():
-    print("Relay turned OFF")
+    print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
 
 def relay_on():
-    print(f"Relay turned ON \n {'='*20}")
+    print(f"{'='*20} \n Relay turned ON \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
 
 def relay_blink(delay, blinks):
@@ -39,20 +39,20 @@ gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 answer = 0
 while(answer != 3):
     answer = input("""Please Enter A Number Choice:
-1. turn on relay
-2. turn off relay
-3. exit program\n>>""")
+    1. turn on relay
+    2. turn off relay
+    3. exit program\n\n>> """)
     match(answer):
         case '1':
             relay_on()
-            print("[RELAY SWITCH] >> ON <<")
+            print("[RELAY SWITCH] >> ON <<\n")
         case '2':
             relay_off()
-            print("[RELAY SWITCH] OFF")
+            print("[RELAY SWITCH] OFF\n")
         case '3':
             exit(0)
-        case default:
+        case _:
             print("Undefined input")
 
-    print(f'[TEMPERATURE] {thermocouple.temperature} C')
+    print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
 
