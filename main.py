@@ -47,13 +47,17 @@ while(answer != 4):
         case '1':
             print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
         case '2':
+            print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
             relay_on()
         case '3':
+            print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
             relay_off()
         case '4':
             break
         case _:
             print("Undefined input")
 
-    print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+print("System Exited Successfully!\n")
+    
 
