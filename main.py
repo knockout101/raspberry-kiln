@@ -6,21 +6,6 @@ import RPi.GPIO as gpio
 from time import sleep
 
 
-##################################
-##            SETUP             ##
-##################################
-
-RELAY_SWITCH_PIN = 6
-
-SPI = board.SPI()
-
-cs = digitalio.DigitalInOut(board.D5)
-cs.direction = digitalio.Direction.OUTPUT
-thermocouple = adafruit_max31856.MAX31856(SPI, cs)
-
-gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
-
-
 def relay_off():
     print("Relay turned OFF")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
@@ -38,6 +23,21 @@ def relay_blink(delay, blinks):
 
 
 if __name__ == "__main___":
+
+    ##################################
+    ##            SETUP             ##
+    ##################################
+
+    RELAY_SWITCH_PIN = 6
+
+    SPI = board.SPI()
+
+    cs = digitalio.DigitalInOut(board.D5)
+    cs.direction = digitalio.Direction.OUTPUT
+    thermocouple = adafruit_max31856.MAX31856(SPI, cs)
+
+    gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
+
     answer = 0
     while(answer != 3):
         answer = input("""Please Enter A Number Choice:
