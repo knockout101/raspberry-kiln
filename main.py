@@ -43,13 +43,13 @@ while(answer != 3):
 2. turn off relay
 3. exit program\n>>""")
     match(answer):
-        case 1:
+        case '1':
             relay_on()
             print("[RELAY SWITCH] >> ON <<")
-        case 2:
+        case '2':
             relay_off()
             print("[RELAY SWITCH] OFF")
-        case 3:
+        case '3':
             exit(0)
         case default:
             print("Undefined input")
