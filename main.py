@@ -39,9 +39,9 @@ gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 answer = 0
 while(answer != 3):
     answer = input("""Please Enter A Number Choice:
-                1. turn on relay
-                2. turn off relay
-                3. exit program""")
+1. turn on relay
+2. turn off relay
+3. exit program\n>>""")
     match(answer):
         case 1:
             relay_on()
@@ -51,7 +51,7 @@ while(answer != 3):
             print("[RELAY SWITCH] OFF")
         case 3:
             exit(0)
-        case _:
+        case default:
             print("Undefined input")
 
     print(f'[TEMPERATURE] {thermocouple.temperature} C')
