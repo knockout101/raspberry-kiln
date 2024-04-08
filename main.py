@@ -1,9 +1,12 @@
+import threading
 import atexit
 import board
 import digitalio
 import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep
+
+temp = 0
 
 
 def relay_off():
@@ -26,7 +29,24 @@ def relay_blink(delay, blinks):
 
 def print_temp():
     print('\n')
-    print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+    print(f'[TEMPERATURE] {temp} C\n')
+
+
+def init_temp_sensor():
+    """
+    Setup function
+
+    Setting up thread to monitor a sensor temperature
+
+    stops double calls
+    """
+    if temp1.running:
+        raise (threading.ThreadError(f"{__func__} is already running"))
+    temp1 = threading.Thread(target=init_temp_sensor, daemon=True)
+    temp1.start()
+    print("[Temperature Sensor] Initiated\n")
+    while:
+        temp = thermocouple.temperature
 
 
 @atexit.register
@@ -34,10 +54,10 @@ def shutdown():
     print('Script Shutdown Protocol Initiated\n')
     relay_off()
 
-
 ##################################
 ##            SETUP             ##
 ##################################
+
 
 RELAY_SWITCH_PIN = 6
 
@@ -50,6 +70,12 @@ thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 
 answer = 0
+
+##################################
+##           Program            ##
+##################################
+
+
 while (answer != 4):
     answer = input("""Please Enter A Number Choice:
     1. Print Temperature
