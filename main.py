@@ -71,6 +71,8 @@ gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 
 answer = 0
 
+init_temp_sensor()
+
 ##################################
 ##           Program            ##
 ##################################
