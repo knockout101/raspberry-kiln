@@ -6,8 +6,6 @@ import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep
 
-temp = 0
-
 
 def relay_off():
     print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
@@ -40,19 +38,24 @@ def init_temp_sensor():
 
     stops double calls
     """
+    SPI = board.SPI()
+
+    thermocouple = adafruit_max31856.MAX31856(SPI, cs)
+
     if temp1.running:
-        raise (threading.ThreadError(f"{__func__} is already running"))
+        raise (threading.ThreadError("sensor is already running"))
     temp1 = threading.Thread(target=init_temp_sensor, daemon=True)
     temp1.start()
     print("[Temperature Sensor] Initiated\n")
-    while:
-        temp = thermocouple.temperature
+    while True:
+        global temp = thermocouple.temperature
 
 
 @atexit.register
 def shutdown():
     print('Script Shutdown Protocol Initiated\n')
     relay_off()
+
 
 ##################################
 ##            SETUP             ##
@@ -61,14 +64,13 @@ def shutdown():
 
 RELAY_SWITCH_PIN = 6
 
-SPI = board.SPI()
 
 cs = digitalio.DigitalInOut(board.D5)
 cs.direction = digitalio.Direction.OUTPUT
-thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 
 gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 
+temp = 0
 answer = 0
 
 init_temp_sensor()
