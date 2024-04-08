@@ -1,4 +1,4 @@
-
+import atexit
 import board
 import digitalio
 import adafruit_max31856
@@ -10,9 +10,11 @@ def relay_off():
     print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
 
+
 def relay_on():
     print(f"{'='*20} \n Relay turned ON \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
+
 
 def relay_blink(delay, blinks):
     for _ in range(blinks):
@@ -21,9 +23,16 @@ def relay_blink(delay, blinks):
         relay_off()
         sleep(delay)
 
+
 def print_temp():
     print('\n')
     print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
+
+
+@atexit.register
+def shutdown():
+    print('Script Shutdown Protocol Initiated\n')
+    relay_off()
 
 
 ##################################
@@ -41,7 +50,7 @@ thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 
 answer = 0
-while(answer != 4):
+while (answer != 4):
     answer = input("""Please Enter A Number Choice:
     1. Print Temperature
     2. Turn ON relay
@@ -63,5 +72,3 @@ while(answer != 4):
 
 print(f'[TEMPERATURE] {thermocouple.temperature} C\n')
 print("System Exited Successfully!\n")
-    
-
