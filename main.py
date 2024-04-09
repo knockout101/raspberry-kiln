@@ -46,9 +46,6 @@ def init_temp_sensor():
         raise (threading.ThreadError("sensor is already running"))
     temp1 = threading.Thread(target=init_temp_sensor, daemon=True)
     temp1.start()
-    print("[Temperature Sensor] Initiated\n")
-    while True:
-        global temp = thermocouple.temperature
 
 
 @atexit.register
