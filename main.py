@@ -34,6 +34,7 @@ def init_temp_sensor():
     global CURR_TEMP
     while True:
         with lock:
+            print(f"threading grabbing temp -> {thermocouple.temperature}")
             CURR_TEMP = thermocouple.temperature
         sleep(2)
 
