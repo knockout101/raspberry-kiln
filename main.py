@@ -10,7 +10,9 @@ def low_temp_test_schedule():
     while(True):
         with temp_mutex:
             temp = CURR_TEMP
+            print(f"Current temperature = {temp}")
         if(temp < 90):
+
             relay_on()
         else:
             relay_off()
@@ -19,11 +21,15 @@ def low_temp_test_schedule():
 def relay_off():
     print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
+    global relay_state
+    relay_state = False
 
 
 def relay_on():
     print(f"{'='*20} \n Relay turned ON \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
+    global relay_state
+    relay_state = True
 
 def print_temp():
     with temp_mutex:
@@ -55,6 +61,8 @@ def shutdown():
 ##################################
 ##            SETUP             ##
 ##################################
+
+relay_state = False # starts off
 
 temp_mutex = threading.Lock()
 
