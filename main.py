@@ -58,7 +58,7 @@ def shutdown():
 ##            SETUP             ##
 ##################################
 
-
+TC_MAXIMUM_TEMP_C = 1250
 RELAY_SWITCH_PIN = 6
 
 
