@@ -29,6 +29,7 @@ def init_temp_sensor():
 
     stops double calls
     """
+    global SPI
     global thermocouple
     global CURR_TEMP
     while True:
