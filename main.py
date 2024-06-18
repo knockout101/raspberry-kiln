@@ -7,28 +7,32 @@ import RPi.GPIO as gpio
 from time import sleep
 
 def low_temp_test_schedule():
+    global relay_state
     while(True):
         with temp_mutex:
             temp = CURR_TEMP
             print(f"Current temperature = {temp}")
         if(temp < 90):
-
             relay_on()
         else:
             relay_off()
         sleep(1)
 
 def relay_off():
+    global relay_state
+    if not relay_state: # return if relay is already off
+        return
     print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
-    global relay_state
     relay_state = False
 
 
 def relay_on():
+    global relay_state
+    if relay_state: # return if relay is already on
+        return
     print(f"{'='*20} \n Relay turned ON \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
-    global relay_state
     relay_state = True
 
 def print_temp():
