@@ -29,13 +29,10 @@ def init_temp_sensor():
 
     stops double calls
     """
-    global SPI
-    global thermocouple
     global CURR_TEMP
     while True:
-        with lock:
-            print(f"threading grabbing temp -> {thermocouple.temperature}")
-            CURR_TEMP = thermocouple.temperature
+        print(f"threading grabbing temp -> {thermocouple.temperature}")
+        CURR_TEMP = thermocouple.temperature
         sleep(2)
 
 
@@ -52,8 +49,6 @@ def shutdown():
 TC_MAXIMUM_TEMP_C = 1250
 RELAY_SWITCH_PIN = 6
 CURR_TEMP = 0
-
-lock = threading.Lock()
 
 cs = digitalio.DigitalInOut(board.D5)
 cs.direction = digitalio.Direction.OUTPUT
