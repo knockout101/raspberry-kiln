@@ -62,7 +62,8 @@ gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 SPI = board.SPI()
 thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 
-threading.Thread(target=init_temp_sensor)
+t_temp = threading.Thread(target=init_temp_sensor)
+t_temp.start()
 
 ##################################
 ##           Program            ##
