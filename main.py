@@ -77,15 +77,12 @@ while (answer != 4):
     match(answer):
         case '1':
             print_temp()
-            break
         case '2':
             print_temp()
             relay_on()
-            break
         case '3':
             print_temp()
             relay_off()
-            break
         case '4':
             break
         case _:
