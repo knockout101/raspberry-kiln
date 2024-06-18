@@ -17,8 +17,8 @@ def relay_on():
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
 
 def print_temp():
-    print('\n')
-    print(f'[TEMPERATURE] {CURR_TEMP} C\n')
+    with temp_mutex:
+        print(f'[TEMPERATURE] {CURR_TEMP} C\n')
 
 
 def init_temp_sensor():
@@ -32,8 +32,9 @@ def init_temp_sensor():
     global thermocouple
     global CURR_TEMP
     while True:
-        print(f"threading grabbing temp -> {thermocouple.temperature}")
-        CURR_TEMP += thermocouple.temperature
+        with temp_mutex:
+            print(f"threading grabbing temp -> {thermocouple.temperature}")
+            CURR_TEMP += thermocouple.temperature
         sleep(2)
 
 
@@ -46,6 +47,8 @@ def shutdown():
 ##################################
 ##            SETUP             ##
 ##################################
+
+temp_mutex = threading.Lock()
 
 TC_MAXIMUM_TEMP_C = 1250
 RELAY_SWITCH_PIN = 6
