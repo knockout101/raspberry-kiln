@@ -6,6 +6,15 @@ import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep
 
+def low_temp_test_schedule():
+    while(True):
+        with temp_mutex:
+            temp = CURR_TEMP
+        if(temp < 90):
+            relay_on()
+        else:
+            relay_off()
+        sleep(1)
 
 def relay_off():
     print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
@@ -74,7 +83,8 @@ while (answer != 4):
     1. Print Temperature
     2. Turn ON relay
     3. Turn OFF relay
-    4. Exit program\n\n>> """)
+    4. Test Schedule @ 90 Celsius
+    5. Exit program\n\n>> """)
     match(answer):
         case '1':
             print_temp()
@@ -85,6 +95,9 @@ while (answer != 4):
             print_temp()
             relay_off()
         case '4':
+            print("Initiating test at 90 Celsius")
+            low_temp_test_schedule()
+        case '5':
             break
         case _:
             print("Undefined input")
