@@ -34,7 +34,7 @@ def init_temp_sensor():
         with lock:
             global CURR_TEMP
             CURR_TEMP = thermocouple.temperature
-        sleep(2)
+            sleep(2)
 
 
 @atexit.register
@@ -61,7 +61,7 @@ gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 SPI = board.SPI()
 thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 
-t_temp = threading.Thread(target=init_temp_sensor)
+t_temp = threading.Thread(target=init_temp_sensor, daemon=True)
 
 ##################################
 ##           Program            ##
