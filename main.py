@@ -33,7 +33,7 @@ def init_temp_sensor():
     global CURR_TEMP
     while True:
         with temp_mutex:
-            CURR_TEMP += thermocouple.temperature
+            CURR_TEMP = thermocouple.temperature
         sleep(2)
 
 
