@@ -29,10 +29,11 @@ def init_temp_sensor():
 
     stops double calls
     """
+    global thermocouple
     global CURR_TEMP
     while True:
         print(f"threading grabbing temp -> {thermocouple.temperature}")
-        CURR_TEMP = thermocouple.temperature
+        CURR_TEMP += thermocouple.temperature
         sleep(2)
 
 
@@ -58,7 +59,7 @@ gpio.setup(RELAY_SWITCH_PIN, gpio.OUT)
 SPI = board.SPI()
 thermocouple = adafruit_max31856.MAX31856(SPI, cs)
 
-t_temp = threading.Thread(target=init_temp_sensor)
+threading.Thread(target=init_temp_sensor)
 
 ##################################
 ##           Program            ##
