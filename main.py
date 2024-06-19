@@ -6,15 +6,21 @@ import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep
 
+# Time delay for watchdog thread to poll TC
 SENSOR_DELAY = 1
+# Actual Temperature
+TEST_TEMPERATURE = 90
+# Temperature trimmed by 15 to address the thermal profile and position of the TC 
+TRIMMED_TEMPERATURE = TEST_TEMPERATURE - 15
 
 def low_temp_test_schedule():
+    "Test the kiln to maintain test temperature"
     global relay_state
     while(True):
         with temp_mutex:
             temp = CURR_TEMP
             print(f"Current temperature = {temp}")
-        if(temp < 90):
+        if(temp < TRIMMED_TEMPERATURE):
             relay_on()
         else:
             relay_off()
@@ -22,6 +28,11 @@ def low_temp_test_schedule():
 
 
 def relay_off():
+    """
+    Switches relay off, sets state to false, and prints a log message
+    
+    Relay state is checked before code block is executed, stopping unnecessary code execution
+    """
     global relay_state
     if not relay_state: # return if relay is already off
         return
@@ -31,6 +42,11 @@ def relay_off():
 
 
 def relay_on():
+    """
+    Switches relay on, sets state to true, and prints a log message
+    
+    Relay state is checked before code block is executed, stopping unnecessary code execution
+    """
     global relay_state
     if relay_state: # return if relay is already on
         return
@@ -40,6 +56,7 @@ def relay_on():
 
 
 def print_temp():
+    """Obtains the mutex for temperature sensor"""
     with temp_mutex:
         print(f'[TEMPERATURE] {CURR_TEMP} C\n')
 
@@ -62,6 +79,7 @@ def init_temp_sensor():
 
 @atexit.register
 def shutdown():
+    """When system is shutdown relay is always turned off"""
     print('Script Shutdown Protocol Initiated\n')
     relay_off()
 
