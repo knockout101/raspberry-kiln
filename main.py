@@ -6,6 +6,8 @@ import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep
 
+SENSOR_DELAY = 1
+
 def low_temp_test_schedule():
     global relay_state
     while(True):
@@ -16,7 +18,8 @@ def low_temp_test_schedule():
             relay_on()
         else:
             relay_off()
-        sleep(2)
+        sleep(SENSOR_DELAY)
+
 
 def relay_off():
     global relay_state
@@ -34,6 +37,7 @@ def relay_on():
     print(f"{'='*20} \n Relay turned ON \n {'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
     relay_state = True
+
 
 def print_temp():
     with temp_mutex:
@@ -53,7 +57,7 @@ def init_temp_sensor():
     while True:
         with temp_mutex:
             CURR_TEMP = thermocouple.temperature
-        sleep(2)
+        sleep(SENSOR_DELAY)
 
 
 @atexit.register
