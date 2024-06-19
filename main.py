@@ -16,7 +16,7 @@ def low_temp_test_schedule():
             relay_on()
         else:
             relay_off()
-        sleep(1)
+        sleep(2)
 
 def relay_off():
     global relay_state
