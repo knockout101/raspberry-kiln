@@ -4,7 +4,17 @@ import board
 import digitalio
 import adafruit_max31856
 import RPi.GPIO as gpio
-from time import sleep
+from time import sleep, time
+
+bisque_schedule = {
+                    initial_heating: [(200,1000), 250],
+                    medium_heating: [(1000, 1500), 200],
+                    final_heating: [(1500, 1850), 150],
+                    soaking: [1850, 20]
+                }
+
+def start_schedule()
+    global CURR_TEMP
 
 # Time delay for watchdog thread to poll TC
 SENSOR_DELAY = 1
@@ -70,7 +80,6 @@ def init_temp_sensor():
     stops double calls
     """
     global thermocouple
-    global CURR_TEMP
     while True:
         with temp_mutex:
             CURR_TEMP = thermocouple.temperature
