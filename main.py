@@ -5,29 +5,32 @@ import digitalio
 import adafruit_max31856
 import RPi.GPIO as gpio
 from time import sleep, time
-
-# Schedules
+"""
+MAX31856 units out - Celsius
+"""
+# Schedules:
+# predry and soaking stages only have heat ranges ( [0], [1] ]
+# indexing
+#   [0] - heat range (min , max]
+#   [1] - maximum heat increase per hour in F
+#   [2] - maximum heat increase per minute in F
 bisque_schedule = {
-                    "predry_heating" : [0, 200],
-                    "initial_heating": [(200,1000), 250, 250/60],
-                    "medium_heating": [(1000, 1500), 200, 200/60],
-                    "final_heating": [(1500, 1850), 150, 150/60],
-                    "soaking": [1850, 20]
+                    "predry_heating" : [0, 100],
+                    "initial_heating": [(100,120), 139, 139/60],
+                    "final_heating": [(650, 1000), 167, 167/60],
+                    "soaking": [1000, 30]
                 }
 # States
 relay_state = False # starts off
-    # Reperesents state of completion
-SOAKING = False
 # Mutexes
 temp_mutex = threading.Lock()
 hour_mutex = threading.Lock()
 min_mutex = threading.Lock()
 # Constants
+SOAKING_DURATION = 30*60  # in seconds
 TC_MAXIMUM_TEMP_C = 1250
 RELAY_SWITCH_PIN = 6
 ONE_HOUR_IN_S = 3600
-
-
 ONE_MIN_IN_S = 60
 # Current temperature
 CURR_TEMP = 0
@@ -117,7 +120,6 @@ def hour_rate_delay() -> None:
     sleep(30)
     relay_on()
 
-
 def hold_temp(temperature: int, duration: int) -> None:
     starting_time = time()
     while True:
@@ -128,13 +130,14 @@ def hold_temp(temperature: int, duration: int) -> None:
         else:
             relay_off()
         time_diff = time() - starting_time
-        if time_diff > duration:
+        if time_diff >= duration:
             return
         sleep(SENSOR_DELAY)
 
 
-def start_schedule() -> None:
+def start_bisque_schedule() -> None:
     # Start threads
+    state = "initializing"
     t_hour_check.start()
     t_min_check.start()
     # Turn on relay to start heating
@@ -142,41 +145,55 @@ def start_schedule() -> None:
     # Record starting time
     starting_time = time()
     while 1:
+        # Pull current temp from shared variable
         temp_now = pull_temp()
         match temp_now:
-
+            # Pre-heating stage, no maximum heating rate, pass when x is in predry_heating range
             case x if x > bisque_schedule["predry_heating"][0] and x <= bisque_schedule["predry_heating"][1]:
+                if state is not "predry":
+                    state = "predry"
                 pass
-            
+            # Initial-heating stage, maximum heating per hour and minute, if current calculated rate is greater than
+            # maximum rates, appropriate delays input to slow heating respectively. Check and assign appropriate state 
+            # Note: for initial stage index 0 is a tuple (min, max)
             case x if x > bisque_schedule["initial_heating"][0][0] and x <= bisque_schedule["initial_heating"][0][1]:
+                if state is not "initial":
+                    state = "initial"
+                # Indexing note: [1] is hourly rate and [2] is the minutely rate
                 if pull_min_rate() > bisque_schedule["initial_heating"][2]:
                     min_rate_delay()
-                if pull_hour_rate() > bisque_schedule["initial_heating"][2]:
+                if pull_hour_rate() > bisque_schedule["initial_heating"][1]:
                     hour_rate_delay() 
-
-            case x if x > bisque_schedule["medium_heating"][0][0] and x <= bisque_schedule["medium_heating"][0][1]:
-                if pull_min_rate() > bisque_schedule["medium_heating"][2]:
-                    min_rate_delay()
-                if pull_hour_rate() > bisque_schedule["medium_heating"][2]:
-                    hour_rate_delay()
-
+            # Final-heating state, maximum heating per hour and minute, if current calculated rate is greater than 
+            # maximum rates, delay appropriately, check and assign appropriate state
+            # Note: for final stage index 0 is a tuple (min, max)
             case x if x > bisque_schedule["final_heating"][0][0] and x <= bisque_schedule["final_heating"][0][1]:
+                if state is not "final":
+                    state = "final"
+                # Indexing note: [1] is hourly rate and [2] is the minutely rate
                 if pull_min_rate() > bisque_schedule["final_heating"][2]:
                     min_rate_delay()
-                if pull_hour_rate() > bisque_schedule["final_heating"][2]:
+                if pull_hour_rate() > bisque_schedule["final_heating"][1]:
                     hour_rate_delay()
-
-            case x if x > bisque_schedule["soaking"][0] and SOAKING == 0:
-                hold_temp(bisque_schedule["soaking"][0])
-                SOAKING = True # show completed
-                
+            # When soaking temperature is reached hold temperature for 
+            case x if x > bisque_schedule["soaking"][0]:
+                if state is not "soaking":
+                    state = "soaking"
+                # Duration is set to seconds for - 30 minutes
+                hold_temp(bisque_schedule["soaking"][0], SOAKING_DURATION)
+                # Print schedule duration in hours
+                duration = time() - starting_time
+                print(f"Schedule lasted: {duration / ONE_HOUR_IN_S}")
+                # Schedule is completed
+                return
+            # Zero reading means the probe is broken or the wiring is disconnect, throw error    
             case 0:
                 raise ZeroReadingError("Reading 0 from thermocouple")
-                 
+            # Any values read outside of range specified and not zero throw error, expected real bounds in celsius [23, 1000]
             case _:
                 raise OutOfBoundsError("[FAULT] - CURR_TEMP is out of bounds")
-        
-        sleep(60)
+        # delay 30 seconds for checking minutely rate at 2:1 not just 1:1 on timing
+        sleep(30)
 
 
 class ZeroReadingError(Exception):
@@ -281,7 +298,7 @@ if __name__ == "__main__":
             case '4':
                 print("Initialize bisque fire schedule")
                 try:
-                    start_schedule()
+                    start_bisque_schedule()
                 except (ZeroReadingError, OutOfBoundsError) as e:
                     print("[SCHEDULE ERROR] - {e}")
                     relay_off()
