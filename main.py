@@ -144,28 +144,35 @@ def start_schedule() -> None:
     while 1:
         temp_now = pull_temp()
         match temp_now:
+
             case x if x > bisque_schedule["predry_heating"][0] and x <= bisque_schedule["predry_heating"][1]:
                 pass
+            
             case x if x > bisque_schedule["initial_heating"][0][0] and x <= bisque_schedule["initial_heating"][0][1]:
-                if pull_min_rate > bisque_schedule["initial_heating"][2]:
+                if pull_min_rate() > bisque_schedule["initial_heating"][2]:
                     min_rate_delay()
-                if pull_hour_rate > bisque_schedule["initial_heating"][2]:
+                if pull_hour_rate() > bisque_schedule["initial_heating"][2]:
                     hour_rate_delay() 
+
             case x if x > bisque_schedule["medium_heating"][0][0] and x <= bisque_schedule["medium_heating"][0][1]:
-                if pull_min_rate > bisque_schedule["medium_heating"][2]:
+                if pull_min_rate() > bisque_schedule["medium_heating"][2]:
                     min_rate_delay()
-                if pull_hour_rate > bisque_schedule["medium_heating"][2]:
+                if pull_hour_rate() > bisque_schedule["medium_heating"][2]:
                     hour_rate_delay()
+
             case x if x > bisque_schedule["final_heating"][0][0] and x <= bisque_schedule["final_heating"][0][1]:
-                if pull_min_rate > bisque_schedule["final_heating"][2]:
+                if pull_min_rate() > bisque_schedule["final_heating"][2]:
                     min_rate_delay()
-                if pull_hour_rate > bisque_schedule["final_heating"][2]:
+                if pull_hour_rate() > bisque_schedule["final_heating"][2]:
                     hour_rate_delay()
+
             case x if x > bisque_schedule["soaking"][0] and SOAKING == 0:
                 hold_temp(bisque_schedule["soaking"][0])
                 SOAKING = True # show completed
+                
             case 0:
                 raise ZeroReadingError("Reading 0 from thermocouple")
+                 
             case _:
                 raise OutOfBoundsError("[FAULT] - CURR_TEMP is out of bounds")
         
@@ -272,11 +279,12 @@ if __name__ == "__main__":
                 print_temp()
                 relay_off()
             case '4':
-                print("Initiating test at 90 Celsius")
-                try:    
+                print("Initialize bisque fire schedule")
+                try:
                     start_schedule()
                 except (ZeroReadingError, OutOfBoundsError) as e:
                     print("[SCHEDULE ERROR] - {e}")
+                    relay_off()
                     break
             case '5':
                 break
