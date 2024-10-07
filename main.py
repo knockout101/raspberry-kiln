@@ -267,8 +267,6 @@ def init_temp_sensor():
     stops double calls
     """
     global thermocouple
-    if not thermocouple:
-        print("The thermocouple is failing")
     while True:
         with temp_mutex:
             CURR_TEMP = thermocouple.temperature
