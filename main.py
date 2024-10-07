@@ -158,14 +158,14 @@ def start_bisque_schedule() -> None:
         match temp_now:
             # Pre-heating stage, no maximum heating rate, pass when x is in predry_heating range
             case x if x > bisque_schedule["predry_heating"][0] and x <= bisque_schedule["predry_heating"][1]:
-                if state is not "predry":
+                if state != "predry":
                     state = "predry"
                 pass
             # Initial-heating stage, maximum heating per hour and minute, if current calculated rate is greater than
             # maximum rates, appropriate delays input to slow heating respectively. Check and assign appropriate state 
             # Note: for initial stage index 0 is a tuple (min, max)
             case x if x > bisque_schedule["initial_heating"][0][0] and x <= bisque_schedule["initial_heating"][0][1]:
-                if state is not "initial":
+                if state != "initial":
                     state = "initial"
                 # Indexing note: [1] is hourly rate and [2] is the minutely rate
                 if pull_min_rate() > bisque_schedule["initial_heating"][2]:
@@ -176,7 +176,7 @@ def start_bisque_schedule() -> None:
             # maximum rates, delay appropriately, check and assign appropriate state
             # Note: for final stage index 0 is a tuple (min, max)
             case x if x > bisque_schedule["final_heating"][0][0] and x <= bisque_schedule["final_heating"][0][1]:
-                if state is not "final":
+                if state != "final":
                     state = "final"
                 # Indexing note: [1] is hourly rate and [2] is the minutely rate
                 if pull_min_rate() > bisque_schedule["final_heating"][2]:
@@ -185,7 +185,7 @@ def start_bisque_schedule() -> None:
                     hour_rate_delay()
             # When soaking temperature is reached hold temperature for 
             case x if x > bisque_schedule["soaking"][0]:
-                if state is not "soaking":
+                if state != "soaking":
                     state = "soaking"
                 # Duration is set to seconds for - 30 minutes
                 hold_temp(bisque_schedule["soaking"][0], SOAKING_DURATION)
