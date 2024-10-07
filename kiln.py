@@ -138,7 +138,7 @@ def hold_temp(temperature: int, duration: int) -> None:
 
 def save_temp(curr_temp: float, time_marker: float):
     with open(DATA_FILE, "w+") as data_file:
-        data_file.write(f"{curr_temp},{time_marker}")
+        data_file.write(f"{curr_temp:.2f},{time_marker:.2f}")
 
 
 def start_bisque_schedule() -> None:
