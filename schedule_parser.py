@@ -10,7 +10,7 @@ if __name__ == "__main__":
         print("Add data file as argument to program call")
         exit(1)
 
-    with open(sys.argv[1], "w+") as file:
+    with open(sys.argv[1], "r") as file:
         rows = csv.reader(file)
         for row in rows:
             temp_data.append(float(row[0]))

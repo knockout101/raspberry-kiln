@@ -137,7 +137,7 @@ def hold_temp(temperature: int, duration: int) -> None:
         sleep(SENSOR_DELAY)
 
 def save_temp(curr_temp: float, time_marker: float):
-    with open(DATA_FILE, "w+") as data_file:
+    with open(DATA_FILE, "a+") as data_file:
         data_file.write(f"{curr_temp:.2f},{time_marker:.2f}\n")
 
 
