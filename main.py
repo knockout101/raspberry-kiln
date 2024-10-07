@@ -51,6 +51,8 @@ SENSOR_DELAY = 1
 TEST_TEMPERATURE = 90
 # Temperature trimmed by 15 to address the thermal profile and position of the TC 
 TRIMMED_TEMPERATURE = TEST_TEMPERATURE - 15
+# Data file constant
+DATA_FILE = "data.csv"
 
 
 
@@ -111,13 +113,13 @@ def pull_temp() -> int:
 
 def min_rate_delay() -> None:
     relay_off()
-    sleep(10)
+    sleep(30)
     relay_on()
  
 
 def hour_rate_delay() -> None:
     relay_off()
-    sleep(30)
+    sleep(10*60) # 10 minutes (10 * 60 seconds)
     relay_on()
 
 def hold_temp(temperature: int, duration: int) -> None:
@@ -134,6 +136,10 @@ def hold_temp(temperature: int, duration: int) -> None:
             return
         sleep(SENSOR_DELAY)
 
+def save_temp(curr_temp: float, time_marker: float):
+    with open(DATA_FILE, "w+") as data_file:
+        data_file.write(f"{curr_temp},{time_marker}")
+
 
 def start_bisque_schedule() -> None:
     # Start threads
@@ -147,6 +153,8 @@ def start_bisque_schedule() -> None:
     while 1:
         # Pull current temp from shared variable
         temp_now = pull_temp()
+        # save temperature data
+        save_temp(temp_now, time() - starting_time)
         match temp_now:
             # Pre-heating stage, no maximum heating rate, pass when x is in predry_heating range
             case x if x > bisque_schedule["predry_heating"][0] and x <= bisque_schedule["predry_heating"][1]:
