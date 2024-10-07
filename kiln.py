@@ -151,7 +151,7 @@ def start_bisque_schedule() -> None:
     # Record starting time
     starting_time = time()
     while 1:
-        print("Checking ")
+        print("Checking scheduling")
         # Pull current temp from shared variable
         temp_now = pull_temp()
         # save temperature data
@@ -159,6 +159,7 @@ def start_bisque_schedule() -> None:
         match temp_now:
             # Pre-heating stage, no maximum heating rate, pass when x is in predry_heating range
             case x if x > bisque_schedule["predry_heating"][0] and x <= bisque_schedule["predry_heating"][1]:
+                print(f"temp: {temp_now}\nFound to be in predrying stage")
                 if state != "predry":
                     state = "predry"
                 pass
@@ -166,6 +167,7 @@ def start_bisque_schedule() -> None:
             # maximum rates, appropriate delays input to slow heating respectively. Check and assign appropriate state 
             # Note: for initial stage index 0 is a tuple (min, max)
             case x if x > bisque_schedule["initial_heating"][0][0] and x <= bisque_schedule["initial_heating"][0][1]:
+                print(f"temp: {temp_now}\nFound to be in initial heating stage")
                 if state != "initial":
                     state = "initial"
                 # Indexing note: [1] is hourly rate and [2] is the minutely rate
@@ -177,6 +179,7 @@ def start_bisque_schedule() -> None:
             # maximum rates, delay appropriately, check and assign appropriate state
             # Note: for final stage index 0 is a tuple (min, max)
             case x if x > bisque_schedule["final_heating"][0][0] and x <= bisque_schedule["final_heating"][0][1]:
+                print(f"temp: {temp_now}\nFound to be in final heating stage")
                 if state != "final":
                     state = "final"
                 # Indexing note: [1] is hourly rate and [2] is the minutely rate
@@ -186,6 +189,7 @@ def start_bisque_schedule() -> None:
                     hour_rate_delay()
             # When soaking temperature is reached hold temperature for 
             case x if x > bisque_schedule["soaking"][0]:
+                print(f"temp: {temp_now}\nFound to be in soaking stage")
                 if state != "soaking":
                     state = "soaking"
                 # Duration is set to seconds for - 30 minutes
@@ -202,7 +206,7 @@ def start_bisque_schedule() -> None:
             case _:
                 raise OutOfBoundsError("[FAULT] - CURR_TEMP is out of bounds")
         # delay 30 seconds for checking minutely rate at 2:1 not just 1:1 on timing
-        sleep(30)
+        sleep(5)
 
 
 class ZeroReadingError(Exception):
@@ -237,7 +241,7 @@ def relay_off():
     global relay_state
     if not relay_state: # return if relay is already off
         return
-    print(f"{'='*20} \n Relay turned OFF \n {'='*20} \n")
+    print(f"{'='*20} \n Relay turned OFF \n{'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.LOW)
     relay_state = False
 
@@ -250,7 +254,7 @@ def relay_on():
     global relay_state
     if relay_state: # return if relay is already on
         return
-    print(f"{'='*20} \n Relay turned ON \n {'='*20} \n")
+    print(f"{'='*20} \n Relay turned ON \n{'='*20} \n")
     gpio.output(RELAY_SWITCH_PIN, gpio.HIGH)
     relay_state = True
 
