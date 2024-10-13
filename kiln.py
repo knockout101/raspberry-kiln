@@ -16,8 +16,8 @@ MAX31856 units out - Celsius
 #   [2] - maximum heat increase per minute in F
 bisque_schedule = {
                     "predry_heating" : [0, 100],
-                    "initial_heating": [(100,120), 139, 139/60],
-                    "final_heating": [(650, 1000), 167, 167/60],
+                    "initial_heating": [(100,600), 139, 139/60],
+                    "final_heating": [(600, 1000), 167, 167/60],
                     "soaking": [1000, 30]
                 }
 # States
